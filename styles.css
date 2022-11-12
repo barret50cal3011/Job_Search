@@ -1,0 +1,44 @@
+body{
+    font-family: cursive;
+}
+
+button{
+    font-family: cursive;
+}
+
+#title{
+    display: flex;
+    justify-content: center;
+}
+
+#top{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+#job-search{
+    display: none;
+    flex-direction: column;
+}
+
+#current-jobs{
+    display: none;
+}
+
+#edit-job{
+    display: none;
+}
+
+#add-job{
+    display: none;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.job-info-section{
+    display: flex;
+    flex-direction: column;
+}
