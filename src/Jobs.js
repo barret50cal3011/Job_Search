@@ -1,3 +1,7 @@
+const url = "http://localhost:8080";
+const url_add = "/add";
+const url_search = "/search";
+
 const show_add_job_button = document.getElementById("show-add-job-button");
 const show_search_job_button = document.getElementById("show-search-button");
 
@@ -35,7 +39,17 @@ function show_find_jobs(){
 }
 
 function search_by_company(){
-    alert("You are looking for " + input_company_name.value);
+    let company = input_company_name.value;
+
+    fetch(url + url_search + `/${company}`, {
+        method: "post",
+        headers: {
+            "Content-Type" : "application/json"
+        },
+        body: JSON.stringify({
+            company
+        })
+    });
     //TODO: add server link
 }
 
@@ -48,7 +62,16 @@ function add_job(){
         date: input_date.value,
         status: input_status.value
     };
-
+    console.log(job);
+    fetch(url + url_add + `/${job}`, {
+        method: "post",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            job
+        })
+    });
     //TODO: send the new job to the server
 }
 
