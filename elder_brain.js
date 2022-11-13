@@ -1,17 +1,6 @@
 const express = require("express");
 const cors = require("cors");
 
-class Job{
-    constructor(source, link, company, position, date, status){
-        this.source = source;
-        this.link = link;
-        this.company = company;
-        this.position = position;
-        this.date = date;
-        this.status = status;
-    }
-}
-
 let jobs = [];
 
 const app = express();

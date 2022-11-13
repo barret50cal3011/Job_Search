@@ -49,8 +49,7 @@ function search_by_company(){
         body: JSON.stringify({
             company
         })
-    });
-    //TODO: add server link
+    }).then();
 }
 
 function add_job(){
@@ -62,7 +61,7 @@ function add_job(){
         date: input_date.value,
         status: input_status.value
     };
-    console.log(job);
+
     fetch(url + url_add + `/${job}`, {
         method: "post",
         headers: {
@@ -72,7 +71,11 @@ function add_job(){
             job
         })
     });
-    //TODO: send the new job to the server
+    //TODO: get the jobs from the server
+}
+
+function edit_job(){
+
 }
 
 init();
