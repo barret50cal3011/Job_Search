@@ -25,9 +25,12 @@ app.post("/search/:company", (req, res) => {
         }
     }
 
-    console.log(searched_jobs);
+    res.set({
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+    });
 
-    res.end();
+    res.send({searched_jobs});
 })
 
 app.listen(8080, () => {

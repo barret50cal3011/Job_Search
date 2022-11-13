@@ -31,46 +31,112 @@ function init(){
 function show_add_job(){
     add_section.style.display = "flex";
     job_search_section.style.display = "none";
+    current_jobs_section.style.display = "none";
 }
 
 function show_find_jobs(){
     job_search_section.style.display = "flex";
     add_section.style.display = "none";
+    current_jobs_section.style.display = "none";
+}
+
+function show_jobs(searched_jobs){
+    current_jobs_section.style.display = "flex";
+    job_search_section.style.display = "none";
+
+    searched_jobs.forEach((job) => {
+        console.log(job);
+        job_html = `
+            <div class="job-info-section">
+                <input type="radio" name="jobs" id="${job.company}-${job.position}-${job.date}" class="ratio-job">
+                <label class="label-job" for="${job.company}-${job.position}-${job.date}">
+                    <div class="job-info">
+                        <p class="info-title">Source</p>
+                        <p class="info-paragraph">${job.source}</p>
+                    </div>
+                    <div class="job-info">
+                        <p class="info-title">Link</p>
+                        <p class="info-paragraph">${job.link}</p>
+                    </div>
+                    <div class="job-info">
+                        <p class="info-title">Company</p>
+                        <p class="info-paragraph">${job.company}</p>
+                    </div>
+                    <div class="job-info">
+                        <p class="info-title">Position</p>
+                        <p class="info-paragraph">${job.position}</p>
+                    </div>
+                    <div class="job-info">
+                        <p class="info-title">Date</p>
+                        <p class="info-paragraph">${job.date}</p>
+                    </div>
+                    <div class="job-info">
+                        <p class="info-title">Status</p>
+                        <p class="info-paragraph">${job.status}</p>
+                    </div>
+                </label>
+            </div>
+        `
+
+        current_jobs_section.innerHTML += job_html;
+    });
 }
 
 function search_by_company(){
-    let company = input_company_name.value;
+    if(input_company_name === ""){
+        alert("You haven't provided the requierd information");
+    }else{
+        let company = input_company_name.value;
 
-    fetch(url + url_search + `/${company}`, {
-        method: "post",
-        headers: {
-            "Content-Type" : "application/json"
-        },
-        body: JSON.stringify({
-            company
-        })
-    }).then();
+        fetch(url + url_search + `/${company}`, {
+            method: "post",
+            headers: {
+                "Content-Type" : "application/json"
+            },
+            body: JSON.stringify({
+                company
+            })
+        }).then(function (res){
+            if(res.ok){
+                res.json().then(function ({searched_jobs}){
+                    show_jobs(searched_jobs);
+                })
+            }
+        });
+    }
 }
 
 function add_job(){
-    let job = {
-        source: input_source.value,
-        link: input_link.value,
-        company: input_company.value,
-        position: input_position.value,
-        date: input_date.value,
-        status: input_status.value
-    };
 
-    fetch(url + url_add + `/${job}`, {
-        method: "post",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            job
-        })
-    });
+     if(
+        input_source.value === "" ||
+        input_link.value === "" ||
+        input_company.value === "" ||
+        input_position.value === "" ||
+        input_date.value === "" ||
+        input_status.value === ""
+    ){
+        alert("You haven't provided the information requiered");
+    }else{
+        let job = {
+            source: input_source.value,
+            link: input_link.value,
+            company: input_company.value,
+            position: input_position.value,
+            date: input_date.value,
+            status: input_status.value
+        };
+    
+        fetch(url + url_add + `/${job}`, {
+            method: "post",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                job
+            })
+        });
+    }
     //TODO: get the jobs from the server
 }
 
