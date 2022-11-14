@@ -1,6 +1,7 @@
 const url = "http://localhost:8080";
 const url_add = "/add";
 const url_search = "/search";
+const url_edit = "/edit";
 
 const show_add_job_button = document.getElementById("show-add-job-button");
 const show_search_job_button = document.getElementById("show-search-button");
@@ -20,31 +21,44 @@ const input_date = document.getElementById("date-txt");
 const input_status = document.getElementById("status-txt");
 const button_add_job = document.getElementById("add-job-button");
 
+const edit_section = document.getElementById("edit-job");
+const new_status_input = document.getElementById("new-status");
+const edit_button = document.getElementById("edit-button");
+
+let jobs = [];
+
 function init(){
     show_add_job_button.addEventListener("click", show_add_job);
     show_search_job_button.addEventListener("click", show_find_jobs);
 
     search_button.addEventListener("click", search_by_company);
     button_add_job.addEventListener("click", add_job);
+
+    edit_button.addEventListener("click", edit_job);
 }
 
 function show_add_job(){
     add_section.style.display = "flex";
     job_search_section.style.display = "none";
     current_jobs_section.style.display = "none";
+    edit_section.style.display = "none";
 }
 
 function show_find_jobs(){
     job_search_section.style.display = "flex";
     add_section.style.display = "none";
     current_jobs_section.style.display = "none";
+    edit_section.style.display = "none";
 }
 
-function show_jobs(searched_jobs){
+function show_jobs(){
     current_jobs_section.style.display = "flex";
+    edit_section.style.display = "flex"
     job_search_section.style.display = "none";
 
-    searched_jobs.forEach((job) => {
+    current_jobs_section.innerHTML = "";
+
+    jobs.forEach((job) => {
         console.log(job);
         job_html = `
             <div class="job-info-section">
@@ -99,7 +113,9 @@ function search_by_company(){
         }).then(function (res){
             if(res.ok){
                 res.json().then(function ({searched_jobs}){
-                    show_jobs(searched_jobs);
+                    jobs = searched_jobs;
+                    show_jobs()
+                    console.log(jobs)
                 })
             }
         });
@@ -107,7 +123,6 @@ function search_by_company(){
 }
 
 function add_job(){
-
      if(
         input_source.value === "" ||
         input_link.value === "" ||
@@ -137,10 +152,36 @@ function add_job(){
             })
         });
     }
-    //TODO: get the jobs from the server
 }
 
 function edit_job(){
+    let job_to_edit = null;
+    jobs.forEach((job) => {
+        check_job = document.getElementById(`${job.company}-${job.position}-${job.date}`).checked;
+        if(check_job){
+            job_to_edit = job;
+        }
+    });
+
+    if(job_to_edit == null){
+        alert("You have not chouse a job to edit");
+    }
+    else{
+        let new_status = new_status_input.value;
+
+        fetch(url + url_edit + `/${job_to_edit}`,{
+            method: "post",
+            headers:{
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                job_to_edit,
+                new_status
+            })
+        });
+    }
+
+    
 
 }
 
