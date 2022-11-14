@@ -4,6 +4,8 @@ const cors = require("cors");
 let jobs = [];
 
 const app = express();
+
+app.use(express.static("./front"));
 app.use(cors());
 app.use(express.json());
 
